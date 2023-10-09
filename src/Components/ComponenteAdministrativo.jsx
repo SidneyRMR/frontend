@@ -1,16 +1,43 @@
-import { Table, Container, Row, Col, Button, Stack } from "react-bootstrap";
-
+import { Table, Container, Button, Stack } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import ComponenteModal from "../Components/ComponenteModal";
 function ComponenteAdministrativo(props) {
-  // console.log(props.dados)
+    console.log("DADOS", props.dados[0]);
+    console.log("FESTAS", props.festas);
+    console.log("FESTA", props.festa);
+    console.log("selectedItem", props.seletor);
+    
+    const [nomeBotao, setNomeBotao] = useState("Nova Festa");
+  useEffect(() => {
+    if (props.seletor === undefined) {
+      setNomeBotao(null);
+    } else if (props.seletor === "festas") {
+      setNomeBotao("Nova Festa");
+    } else if (props.seletor === "usuarios") {
+      setNomeBotao("Novo Usuário");
+    } else if (props.seletor === "vendas") {
+      setNomeBotao(null);
+    } else if (props.seletor === "produtos") {
+      setNomeBotao("Novo Produto");
+    }
+  }, [props.seletor]);
+
   if (!props.dados || props.dados.length === 0) {
     return <p>Nenhum dado disponível.</p>;
   }
   const colunas = Object.keys(props.dados[0]);
+
   return (
     <Container>
       <Stack direction="horizontal" gap={3}>
         <div className="p-2">
-          <Button variant="success">Adicionar</Button>
+          {nomeBotao === null ? null : (
+            <ComponenteModal
+              nomeBotao={nomeBotao}
+              festa={props.festa}
+              variant="success"
+            />
+          )}
         </div>
         <div className="p-2 sub-titulo">
           LISTAGEM DE {props.seletor.toUpperCase()}
@@ -27,7 +54,7 @@ function ComponenteAdministrativo(props) {
         </thead>
         <tbody>
           {props.dados.map((dado, i) =>
-            dado.nome === "master" | dado.nome === "Master User"? null : (
+            (dado.nome === "master") | (dado.nome === "Master User") ? null : (
               <>
                 <tr key={i} className={i % 2 === 0 ? "Par" : "Impar"}>
                   {colunas.map((coluna) => (

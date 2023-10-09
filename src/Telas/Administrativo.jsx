@@ -88,7 +88,7 @@ function Administrativo() {
               navbarScroll
               variant="tabs"
             >
-              <Nav.Item onClick={() => handleItemClick("festas")}>
+              <Nav.Item >
                 <Nav.Link onClick={() => handleItemClick("festas")}>
                   Festas
                 </Nav.Link>
@@ -157,7 +157,8 @@ function Administrativo() {
             controlId="floatingSelect"
             label="Escolha qual festa gerir"
           >
-            <Form.Select onChange={handleFestaChange}>
+            <Form.Select onChange={(e) => setFesta(e.target.value)}
+    value={festa}>
               <option>Escolha uma festa</option>
               {festas &&
                 festas.map((festa) => (
@@ -172,7 +173,7 @@ function Administrativo() {
 
       <ComponenteAdministrativo
         seletor={selectedItem}
-        // festas={festas}
+        festas={festas}
         dados={dados}
         festa={festa}
       />
