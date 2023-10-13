@@ -12,10 +12,12 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-console.log(
-  "fazer logof do usuario quando sair-- localStorage.removeItem('token');"
-);
-const Login = () => {
+
+// console.log(
+  //   "fazer logof do usuario quando sair-- localStorage.removeItem('token');"
+  // );
+  
+  const Login = () => {
   const VerificaUsuario = async (login, senha) => {
     // let uss = { login: 'srafael', senha: 'srafael' };
     let uss = { login: login, senha: senha };
@@ -33,15 +35,15 @@ const Login = () => {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
         // Redirecionar para a página desejada após o login (opcional)
-        console.log("Logado com sucesso!");
+        // console.log("Logado com sucesso!");
         // history.push('/login'); // Substitua '/abertura-caixa' pela rota desejada
         return (window.location.href = "/administrativo");
       } else {
         throw new Error("Verifique sua conexão ou credenciais inválidas!");
       }
     } catch (error) {
-      //   console.error(error);
-      return toast.error(error.message, {
+        // console.error(error.response.data.mensagem);
+      return toast.error(error.response.data.mensagem, {
         position: toast.POSITION.TOP_CENTER,
       });
     }

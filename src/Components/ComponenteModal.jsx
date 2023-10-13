@@ -10,7 +10,7 @@ const ComponenteModal = (props) => {
   const { login, setLogin } = useState();
   const { senha, setSenha } = useState();
   // const {festumId, setFestumId} = useState(props.festa)
-  console.log("idfesta", props.festa.id);
+  // console.log("idfesta", props.festa.id);
 
   // Manipulador de evento para atualizar o estado da descrição quando o usuário alterar o valor do input
   const handleNomeChange = (event) => {
@@ -56,7 +56,7 @@ const ComponenteModal = (props) => {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Novo Usuário</Modal.Title>
+          <Modal.Title>Criar {props.nomeBotao}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>

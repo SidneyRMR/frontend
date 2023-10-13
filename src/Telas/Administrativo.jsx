@@ -5,7 +5,10 @@ import { api } from "../services/api";
 import { useState, useEffect } from "react";
 import ComponenteAdministrativo from "../Components/ComponenteAdministrativo";
 
+// import axios from "axios";
+
 function Administrativo() {
+
   const [dados, setDados] = useState([]);
   const [festas, setFestas] = useState([]);
   const [festa, setFesta] = useState([]);
@@ -17,23 +20,26 @@ function Administrativo() {
         if (selectedItem === "festas") {
           let res = await api.get(`/api/festa`);
           res = await res.data.festa;
-          console.log('estou aqui ',res);
+          console.log('FESTA: ',res);
           setDados(res);
           setFestas(res);
+
         } else if (selectedItem === "vendas") {
           let res = await api.get(`/api/venda`);
           res = await res.data.venda;
-          console.log('estou aqui ',res);
+          console.log('VENDAS: ',res);
           setDados(res);
+
         } else if (selectedItem === "usuarios") {
             let res = await api.get(`/api/usuario`);
             res = await res.data.usuario;
-            console.log('estou aqui ',res);
+            console.log('USUARIOS: ',res);
             setDados(res);
+
         } else if (selectedItem === "produtos") {
             let res = await api.get(`/api/produto`);
             res = await res.data.produto;
-            console.log('estou aqui ',res);
+            console.log('PRODUTOS: ',res);
             setDados(res);
         }
       } catch (error) {
@@ -97,11 +103,6 @@ function Administrativo() {
               {festa && festa === "master" ? (
                 <>
                   <Nav.Item>
-                    <Nav.Link onClick={() => handleItemClick("vendas")}>
-                      Vendas
-                    </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
                     <Nav.Link onClick={() => handleItemClick("usuarios")}>
                       Usuários
                     </Nav.Link>
@@ -111,17 +112,14 @@ function Administrativo() {
                       Produtos
                     </Nav.Link>
                   </Nav.Item>
-                </>
-              ) : (
-                <>
                   <Nav.Item>
-                    <Nav.Link
-                      disabled
-                      onClick={() => handleItemClick("vendas")}
-                    >
+                    <Nav.Link onClick={() => handleItemClick("vendas")}>
                       Vendas
                     </Nav.Link>
                   </Nav.Item>
+                </>
+              ) : (
+                <>
                   <Nav.Item>
                     <Nav.Link
                       disabled
@@ -136,6 +134,14 @@ function Administrativo() {
                       onClick={() => handleItemClick("produtos")}
                     >
                       Produtos
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link
+                      disabled
+                      onClick={() => handleItemClick("vendas")}
+                    >
+                      Vendas
                     </Nav.Link>
                   </Nav.Item>
                 </>

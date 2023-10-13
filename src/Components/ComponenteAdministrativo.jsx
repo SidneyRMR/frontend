@@ -2,10 +2,10 @@ import { Table, Container, Button, Stack } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import ComponenteModal from "../Components/ComponenteModal";
 function ComponenteAdministrativo(props) {
-    console.log("DADOS", props.dados[0]);
-    console.log("FESTAS", props.festas);
-    console.log("FESTA", props.festa);
-    console.log("selectedItem", props.seletor);
+    // console.log("DADOS", props.dados[0]);
+    // console.log("FESTAS", props.festas);
+    // console.log("FESTA", props.festa);
+    // console.log("selectedItem", props.seletor);
     
     const [nomeBotao, setNomeBotao] = useState("Nova Festa");
   useEffect(() => {
@@ -15,10 +15,10 @@ function ComponenteAdministrativo(props) {
       setNomeBotao("Nova Festa");
     } else if (props.seletor === "usuarios") {
       setNomeBotao("Novo Usuário");
-    } else if (props.seletor === "vendas") {
-      setNomeBotao(null);
     } else if (props.seletor === "produtos") {
       setNomeBotao("Novo Produto");
+    } else if (props.seletor === "vendas") {
+      setNomeBotao(null);
     }
   }, [props.seletor]);
 
