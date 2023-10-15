@@ -18,6 +18,7 @@ import "react-toastify/dist/ReactToastify.css";
   // );
   
   const Login = () => {
+    
   const VerificaUsuario = async (login, senha) => {
     // let uss = { login: 'srafael', senha: 'srafael' };
     let uss = { login: login, senha: senha };
@@ -27,22 +28,20 @@ import "react-toastify/dist/ReactToastify.css";
       const response = await api.post("/api/usuario/login", uss);
 
       if (response.status === 200) {
-        // Se a resposta for bem-sucedida, armazene o token no localStorage
-        const { token } = response.data; // Certifique-se de que a resposta contenha o token
+        const { token, expiresIn, isAdmin } = response.data; // Certifique-se de que a resposta contenha o token e se o usuário é administrador
         localStorage.setItem("token", token);
-
-        // Configurar o cabeçalho Authorization com o token
+        localStorage.setItem("expiresIn", expiresIn);
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-        // Redirecionar para a página desejada após o login (opcional)
-        // console.log("Logado com sucesso!");
-        // history.push('/login'); // Substitua '/abertura-caixa' pela rota desejada
-        return (window.location.href = "/administrativo");
+        if (isAdmin) {
+          window.location.href = "/administrativo";
+        } else {
+          // window.location.href = "/vendas";
+          console.log('não é admin - entrar na tela de vendas',isAdmin);
+        }
       } else {
         throw new Error("Verifique sua conexão ou credenciais inválidas!");
       }
     } catch (error) {
-        // console.error(error.response.data.mensagem);
       return toast.error(error.response.data.mensagem, {
         position: toast.POSITION.TOP_CENTER,
       });
