@@ -76,13 +76,14 @@ const ListagemTabelas = (props) => {
       }
     }
   };
-  return (
+  return (<>
     <Table className="tabela align-center">
-      <ToastContainer />
       <thead>
         <tr>
+      {/* <ToastContainer /> */}
           {colunas &&
             colunas.map((coluna, i) =>
+            coluna === 'administrador' || coluna === 'updatedAt' ? null :
               coluna === "createdAt" ? (
                 <th key={i}>DATA CRIAÇÃO</th>
               ) : coluna === "updatedAt" ? (
@@ -100,16 +101,21 @@ const ListagemTabelas = (props) => {
       <tbody>
         {props.dados &&
           props.dados.map((dado, i) =>
-            dado.nome === 'master' || dado.nome ==="Master User" ? null : (
+            // props.seletor !== 'festas' ? 
+            //   dado.festumId !== props.festa ? null :
+                dado.nome === 'master' || dado.nome ==="Master User"  ? null  : (
               <>
+              {/* {console.log('dado.festumId',dado.festumId, 'props.festa',props.festa)} */}
+
                 <tr key={i} className={i % 2 === 0 ? "Par" : "Impar"}>
                   {colunas &&
                     colunas.map((coluna, i) => (
+                      coluna === 'administrador' || coluna === 'updatedAt' ? null :
                       <td key={i}>
                         {coluna === "ativa" || coluna === "ativo"
                           ? dado[coluna] === true
-                            ? "Sim"
-                            : "Não"
+                          ? "Sim"
+                          : "Não"
                           : dado[coluna]}
                       </td>
                     ))}
@@ -120,31 +126,31 @@ const ListagemTabelas = (props) => {
                       props.seletor === "festas" ? (
                         <ModalFesta
                           festa={props.festa}
-                          nomeBotao="Alterar Festa"
-                          dado={dado.id}
+                          nomeBotao="Alterar"
+                          dado={dado}
                           seletor={props.seletor}
                         />
                       ) : props.seletor === "usuarios" ? (
                         <ModalUsuario
                           festa={props.festa}
-                          nomeBotao="Alterar Usuário"
-                          dado={dado.id}
+                          nomeBotao="Alterar"
+                          dado={dado}
                           seletor={props.seletor}
                         />
                       ) : props.seletor === "produtos" ? (
                         <ModalProduto
                           festa={props.festa}
-                          nomeBotao="Alterar Produto"
+                          nomeBotao="Alterar"
                           dado={dado}
                           seletor={props.seletor}
                         />
-                      ) : null
-                    ) : null}
-
+                      ) : null 
+                    ) : null }
+                    {" "}
                     {props.seletor === "festas" ? (
                       <Button variant="success">Detalhes</Button>
                     ) : null}
-
+                    {" "}
                     {dado.ativo === true || dado.ativa === true ? (
                       <Button
                         variant="warning"
@@ -160,7 +166,7 @@ const ListagemTabelas = (props) => {
                         Encerrar
                       </Button>
                     ) : null}
-
+                    {" "}
                     <Button
                       variant="danger"
                       onClick={() => excluir(dado.id, props.seletor)}
@@ -171,9 +177,10 @@ const ListagemTabelas = (props) => {
                 </tr>
               </>
             )
-          )}
+            )}
       </tbody>
     </Table>
+            </>
   );
 };
 

@@ -1,22 +1,43 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
 import { api } from "../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+
+import { useDataContext } from "../DataContext";
 const ModalProduto = (props) => {
-    const dado = props.dado
-    console.log(dado)
-  const [nome, setNome] = useState();
-  const [preco, setPreco] = useState();
-  const [estoque, setEstoque] = useState();
-  const [medida, setMedida] = useState('unidade');
-  const [tipo, setTipo] = useState('comida');
+  const { atualizaProdutos } = useDataContext();
+  const [show, setShow] = useState(false);
+    // const dado = props.dado
+    // console.log(dado)
+  const [nome, setNome] = useState(props.dado && props.dado.nome ? props.dado.nome :  '');
+  const [preco, setPreco] = useState(props.dado && props.dado.preco ? props.dado.preco :  '');
+  const [estoque, setEstoque] = useState(props.dado && props.dado.estoque ? props.dado.estoque :  '');
+  const [medida, setMedida] = useState(props.dado && props.dado.medida ? props.dado.medida :  'unidade');
+  const [tipo, setTipo] = useState(props.dado && props.dado.tipo ? props.dado.tipo :  'comida');
   // const [ ativo, setAtivo ] = useState();
   // const  festumId = useState(props.festa);
-  console.log("props.dado-modalProdutos", props.dado);
+  // console.log("props.dado-modalProdutos", props.dado);
+  // console.log("props.festa-ModalProduto", props.festa);
 
-  console.log("props.festa-ModalProduto", props.festa);
+
+  useEffect(() => {
+    // Este código será executado toda vez que 'show' for alterado
+    if (props.dado && props.dado.nome) {
+      setNome(props.dado.nome);
+      setPreco(props.dado.preco);
+      setEstoque(props.dado.estoque);
+      setMedida(props.dado.medida);
+      setTipo(props.dado.tipo);
+    } else {
+      setNome('');
+      setPreco('');
+      setEstoque('');
+      setMedida('unidade');
+      setTipo('comida');
+    }
+  }, [show, props.dado]);
 
   // Manipulador de evento para atualizar o estado da descrição quando o usuário alterar o valor do input
   const handleNomeChange = (event) => {
@@ -33,7 +54,7 @@ const ModalProduto = (props) => {
     setEstoque(event.target.value);
   };
   const handleTipoChange = (event) => {
-    console.log(event.target.value)
+    // console.log(event.target.value)
     setTipo(event.target.value);
   };
 
@@ -48,6 +69,7 @@ const ModalProduto = (props) => {
         tipo,
         festumId: props.festa,
       });
+      atualizaProdutos()
       toast.success(`${res.data.mensagem}`, {
         position: toast.POSITION.TOP_CENTER,
       });
@@ -77,6 +99,7 @@ const ModalProduto = (props) => {
           tipo,
         });
         // console.log(res.data);
+        atualizaProdutos()
         toast.success(`${res.data.mensagem}`, {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -86,8 +109,6 @@ const ModalProduto = (props) => {
       }
     }
   };
-
-  const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);

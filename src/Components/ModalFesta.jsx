@@ -1,12 +1,25 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
 import { api } from "../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { useDataContext } from "../DataContext";
 const ModalFesta = (props) => {
-  const [ nome, setNome ] = useState();
+  const { atualizaFestas } = useDataContext();
+  const [ nome, setNome ] = useState(props.dado && props.dado.nome ? props.dado.nome :  '');
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    // Este código será executado toda vez que 'show' for alterado
+    if (props.dado && props.dado.nome) {
+      setNome(props.dado.nome);
+    } else {
+      setNome('');
+    }
+  }, [show, props.dado]);
   // console.log("idfesta-modalfesta", props.festa);
+  // console.log("dado-modalfesta", props.dado);
   
   const handleNomeChange = (event) => {
     setNome(event.target.value);
@@ -19,9 +32,12 @@ const ModalFesta = (props) => {
         nome,
         ativa: 1,
       });
+      atualizaFestas()
       toast.success(`${res.data.mensagem}`, {
-        position: toast.POSITION.TOP_CENTER,
+        
+        position: toast.POSITION.TOP_CENTER, 
       });
+      console.log(res.data)
       return res.data ;
     } catch (error) {
       toast.error(error.response.data.mensagem);
@@ -30,7 +46,7 @@ const ModalFesta = (props) => {
 
   const alterarFesta = async (id, nome) => {
     // console.log(id,nome)
-    if (window.confirm("Tem certeza de que alterar esta festa?")) {
+    if (window.confirm("Tem certeza de alterar esta festa?")) {
       // console.log(id, nome);
       try {
         const res = await api.put(`/api/festa/${id}`, {
@@ -39,6 +55,7 @@ const ModalFesta = (props) => {
           ativa: 1,
         });
         // console.log(res.data);
+        atualizaFestas()
         toast.success(`${res.data.mensagem}`, {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -48,8 +65,7 @@ const ModalFesta = (props) => {
       }
     }
   };
-  console.log('festaModalFesta',props.festa)
-  const [show, setShow] = useState(false);
+  // console.log('festaModalFesta',props.festa) 
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);

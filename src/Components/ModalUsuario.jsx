@@ -1,15 +1,30 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
 import { api } from "../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { useDataContext } from "../DataContext";
 const ModalUsuario = (props) => {
-  const [nome, setNome] = useState();
-  const [login, setLogin] = useState();
+  const { atualizaUsuarios } = useDataContext();
+  const [show, setShow] = useState(false);
+
+  const [nome, setNome] = useState(props.dado && props.dado.nome ? props.dado.nome :  '');
+  const [login, setLogin] = useState(props.dado && props.dado.login ? props.dado.login :  '');
   const [senha, setSenha] = useState();
   // console.log("idFesta-ModalUsuario", props.festa);
-  // console.log("idUsuario-ModalUsuario", props.dado);
+  // console.log("dado-ModalUsuario", props.dado);
+  
+  useEffect(() => {
+    // Este código será executado toda vez que 'show' for alterado
+    if (props.dado && props.dado.nome) {
+      setNome(props.dado.nome);
+      setLogin(props.dado.login);
+    } else {
+      setNome('');
+      setLogin('');
+    }
+  }, [show, props.dado]);
 
   // Manipulador de evento para atualizar o estado da descrição quando o usuário alterar o valor do input
   const handleNomeChange = (event) => {
@@ -31,6 +46,7 @@ const ModalUsuario = (props) => {
         senha,
         festumId: props.festa,
       });
+      atualizaUsuarios()
       toast.success(`${res.data.mensagem} `, {
         position: toast.POSITION.TOP_CENTER,
       });
@@ -49,6 +65,7 @@ const ModalUsuario = (props) => {
           nome,
           login,
         });
+        atualizaUsuarios()
         // console.log(res.data);
         toast.success(`${res.data.mensagem}`, {
           position: toast.POSITION.TOP_CENTER,
@@ -59,8 +76,6 @@ const ModalUsuario = (props) => {
       }
     }
   };
-
-  const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -131,7 +146,7 @@ const ModalUsuario = (props) => {
             onClick={() => {
               props.nomeBotao === "Novo Usuário"
                 ? novoUsuario(nome, login, senha)
-                : alterarUsuario(props.dado, nome, login);
+                : alterarUsuario(props.dado.id, nome, login);
               handleClose();
             }}
           >

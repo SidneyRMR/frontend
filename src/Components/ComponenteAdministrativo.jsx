@@ -6,11 +6,13 @@ import ModalFesta from "./ModalFesta";
 import ModalProduto from "./ModalProduto";
 import ListagemTabelas from "./ListagemTabelas";
 
+import { useDataContext } from "../DataContext";
 function ComponenteAdministrativo(props) {
+  const { atualizaFestas,atualizaProdutos,atualizaVendas,atualizaUsuarios } = useDataContext();
     // console.log("DADOS", props.dados[0]);
     // console.log("ITEM SELECIONADO", props.seletor);
     // console.log("FESTAS", props.festas);
-    console.log("FESTAComponeteAdm", props.festa);
+    // console.log("FESTAComponeteAdm", props.festa);
     
     const [nomeBotao, setNomeBotao] = useState("Nova Festa");
 
@@ -19,12 +21,16 @@ function ComponenteAdministrativo(props) {
       setNomeBotao(null);
     } else if (props.seletor === "festas") {
       setNomeBotao("Nova Festa");
+      atualizaFestas()
     } else if (props.seletor === "usuarios") {
       setNomeBotao("Novo Usuário");
+      atualizaUsuarios()
     } else if (props.seletor === "produtos") {
+      atualizaProdutos()
       setNomeBotao("Novo Produto");
     } else if (props.seletor === "vendas") {
       setNomeBotao(null);
+      atualizaVendas()
     }
   }, [props.seletor]);
  
