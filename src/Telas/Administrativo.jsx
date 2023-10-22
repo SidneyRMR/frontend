@@ -3,38 +3,39 @@ import Nav from "react-bootstrap/Nav";
 import { Navbar, FloatingLabel, Form, Container } from "react-bootstrap";
 import { useState, } from "react";
 import ComponenteAdministrativo from "../Components/ComponenteAdministrativo";
-
-import { useDataContext } from "../DataContext";
-
+import { ToastContainer } from "react-toastify";
+import { useDataContext } from "../Context/DataContext";
 
 function Administrativo() {
-  const { dados, atualizaFestas, festas } = useDataContext();
+  const { festas, atualizaFestas, atualizaUsuarios, atualizaProdutos } = useDataContext();
   const [festa, setFesta] = useState();
   const [selectedItem, setSelectedItem] = useState("festas");
 
   const handleFestaChange = (e) => {
     const selectedFesta = e.target.value;
-    if (selectedFesta === 'Escolha uma festa') {
-      window.location.href = "/administrativo";
+    if (selectedFesta === 'Escolha uma festa' || selectedFesta === null) {
+      handleItemClick("festas")
+      // atualizaFestas()
     } else {
       setFesta(selectedFesta);
-      atualizaFestas(); // Chama a função para atualizar festas
+      console.log("Id da festa selecionada",selectedFesta);
     }
   }
-
-
-
-console.log(festas);
   const handleItemClick = (item) => {
+    // if (item === 'festas') {
+    //   return atualizaFestas(); 
+    // } else if (item === 'usuarios') {
+    //   return atualizaUsuarios()
+    // }
+    // console.log('Item selecionado = ',item)
     setSelectedItem(item);
   };
-
 
   return (
     <Container
       className="bg-body-tertiary"
       data-bs-theme="dark"
-    >
+    ><ToastContainer/>
       <Navbar collapseOnSelect  className="bg-body-tertiary">
         <Container fluid>
           <Navbar.Brand href="/administrativo">Gestão de Vendas</Navbar.Brand>
@@ -51,8 +52,6 @@ console.log(festas);
                   Festas
                 </Nav.Link>
               </Nav.Item>
-              {/* <span className="me-auto my-2 my-lg-2 divisa">|</span> */}
-
               <Nav.Item>
                 <Nav.Link
                   disabled={festa === 'Escolha uma festa' || festa === undefined }
@@ -97,7 +96,7 @@ console.log(festas);
               <option value={null}>Escolha uma festa</option>
               {festas &&
                 festas.map((festa, i) => ( 
-                  festa.nome === 'master' || festa.ativa === false ? null :
+                  festa.nome === 'festaMaster' || festa.ativa === false ? null :
                   <option key={i} value={festa.id}>
                     {festa.nome.toUpperCase()}
                   </option>
@@ -106,11 +105,8 @@ console.log(festas);
           </FloatingLabel>
         </Container>
       </Navbar>
-
       <ComponenteAdministrativo
         seletor={selectedItem}
-        festas={festas}
-        dados={dados}
         festa={festa}
       />
     </Container>

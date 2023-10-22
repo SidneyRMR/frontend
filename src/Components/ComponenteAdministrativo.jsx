@@ -6,65 +6,57 @@ import ModalFesta from "./ModalFesta";
 import ModalProduto from "./ModalProduto";
 import ListagemTabelas from "./ListagemTabelas";
 
-import { useDataContext } from "../DataContext";
+import { useDataContext } from "../Context/DataContext";
+
 function ComponenteAdministrativo(props) {
-  const { atualizaFestas,atualizaProdutos,atualizaVendas,atualizaUsuarios } = useDataContext();
-    // console.log("DADOS", props.dados[0]);
-    // console.log("ITEM SELECIONADO", props.seletor);
-    // console.log("FESTAS", props.festas);
-    // console.log("FESTAComponeteAdm", props.festa);
-    
-    const [nomeBotao, setNomeBotao] = useState("Nova Festa");
+  const { atualizaFestas, atualizaProdutos, atualizaVendas, atualizaUsuarios} =
+    useDataContext();
+
+  const [nomeBotao, setNomeBotao] = useState("Nova Festa");
 
   useEffect(() => {
     if (props.seletor === undefined) {
       setNomeBotao(null);
     } else if (props.seletor === "festas") {
       setNomeBotao("Nova Festa");
-      atualizaFestas()
+      atualizaFestas();
     } else if (props.seletor === "usuarios") {
       setNomeBotao("Novo Usuário");
-      atualizaUsuarios()
+      atualizaUsuarios(props.festa);
     } else if (props.seletor === "produtos") {
-      atualizaProdutos()
+      atualizaProdutos(props.festa);
       setNomeBotao("Novo Produto");
     } else if (props.seletor === "vendas") {
       setNomeBotao(null);
-      atualizaVendas()
+      atualizaVendas();
     }
   }, [props.seletor]);
- 
+  
+  // console.log(props.festa);
   return (
     <Container>
-      <Stack direction="horizontal" >
+      <Stack direction="horizontal">
         <div className="p-2">
-          {props.seletor === 'festas' ? (
-              <ModalFesta
-                nomeBotao={nomeBotao}
-                festa={props.festa}
-              />
-           ) : props.seletor === 'usuarios' ? (
-              // Preciso passar a festa pois é uma dependencia do usuario
-              <ModalUsuario
-                nomeBotao={nomeBotao}
-                festa={props.festa}
-              />
-            ) : props.seletor === 'produtos' ? (
-              // Preciso passar a festa pois é uma dependencia do produto
-              <ModalProduto
-                nomeBotao={nomeBotao}
-                festa={props.festa}
-              />
-             ) : null} 
-        
+          {props.seletor === "festas" ? (
+            <ModalFesta nomeBotao={nomeBotao} festa={props.festa} />
+          ) : props.seletor === "usuarios" ? (
+            // Preciso passar a festa pois é uma dependencia do usuario
+            <ModalUsuario nomeBotao={nomeBotao} festa={props.festa} />
+          ) : props.seletor === "produtos" ? (
+            // Preciso passar a festa pois é uma dependencia do produto
+            <ModalProduto nomeBotao={nomeBotao} festa={props.festa} />
+          ) : null}
         </div>
         <div className="p-2 sub-titulo">
           LISTAGEM DE {props.seletor.toUpperCase()}
         </div>
       </Stack>
 
-      <ListagemTabelas seletor={props.seletor} dados={props.dados} festa={props.festa} />
-
+      <ListagemTabelas
+        seletor={props.seletor}
+        dados={props.dados}
+        festa={props.festa}
+      />
     </Container>
   );
 }

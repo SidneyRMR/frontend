@@ -4,7 +4,7 @@ import { api } from "../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { useDataContext } from "../DataContext";
+import { useDataContext } from "../Context/DataContext";
 const ModalFesta = (props) => {
   const { atualizaFestas } = useDataContext();
   const [ nome, setNome ] = useState(props.dado && props.dado.nome ? props.dado.nome :  '');
@@ -85,7 +85,7 @@ const ModalFesta = (props) => {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-6" controlId="usuarioForm.ControlInput1">
+            <Form.Group className="mb-6" id="usuarioForm.ControlInput1">
               <Form.Label>Nome</Form.Label>
               <Form.Control
                 type="text"
@@ -103,7 +103,7 @@ const ModalFesta = (props) => {
             onClick={() => {
               props.nomeBotao === "Nova Festa" ? (
                 novaFesta(nome) ) : (
-                alterarFesta(props.festa, nome))
+                alterarFesta(props.dado.id, nome))
               handleClose()}
             }
           >

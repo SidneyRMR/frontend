@@ -1,25 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
 import { api } from "../services/api";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-import { useDataContext } from "../DataContext";
+import { useDataContext } from "../Context/DataContext";
 const ModalProduto = (props) => {
   const { atualizaProdutos } = useDataContext();
   const [show, setShow] = useState(false);
-    // const dado = props.dado
-    // console.log(dado)
-  const [nome, setNome] = useState(props.dado && props.dado.nome ? props.dado.nome :  '');
-  const [preco, setPreco] = useState(props.dado && props.dado.preco ? props.dado.preco :  '');
-  const [estoque, setEstoque] = useState(props.dado && props.dado.estoque ? props.dado.estoque :  '');
+  const [nome, setNome] = useState(props.dado && props.dado.nome ? props.dado.nome :  null);
+  const [preco, setPreco] = useState(props.dado && props.dado.preco ? props.dado.preco :  null);
+  const [estoque, setEstoque] = useState(props.dado && props.dado.estoque ? props.dado.estoque :  null);
   const [medida, setMedida] = useState(props.dado && props.dado.medida ? props.dado.medida :  'unidade');
   const [tipo, setTipo] = useState(props.dado && props.dado.tipo ? props.dado.tipo :  'comida');
-  // const [ ativo, setAtivo ] = useState();
-  // const  festumId = useState(props.festa);
-  // console.log("props.dado-modalProdutos", props.dado);
-  // console.log("props.festa-ModalProduto", props.festa);
 
 
   useEffect(() => {
@@ -47,14 +41,12 @@ const ModalProduto = (props) => {
     setPreco(event.target.value);
   };
   const handleMedidaChange = (event) => {
-    // console.log(event.target.value)
     setMedida(event.target.value);
   };
   const handleEstoqueChange = (event) => {
     setEstoque(event.target.value);
   };
   const handleTipoChange = (event) => {
-    // console.log(event.target.value)
     setTipo(event.target.value);
   };
 
@@ -67,17 +59,19 @@ const ModalProduto = (props) => {
         medida,
         estoque,
         tipo,
-        festumId: props.festa,
+        festaId: props.festa,
       });
-      atualizaProdutos()
+      atualizaProdutos(props.festa)
       toast.success(`${res.data.mensagem}`, {
         position: toast.POSITION.TOP_CENTER,
       });
       return res.data;
     } catch (error) {
-      toast.error(error.response.data.mensagem);
-    }
-  };
+      toast.error(`error.response.data.mensagem)`,{position: toast.POSITION.TOP_CENTER}
+      )
+  }
+
+  toast.error('Verifique os valores!')}
 
   const alteraProduto = async (
     id,
@@ -99,7 +93,7 @@ const ModalProduto = (props) => {
           tipo,
         });
         // console.log(res.data);
-        atualizaProdutos()
+        atualizaProdutos(props.festa)
         toast.success(`${res.data.mensagem}`, {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -116,19 +110,18 @@ const ModalProduto = (props) => {
   const inputNome = useRef(null);
   return (
     <>
-      <ToastContainer />
 
       <Button variant="primary" onClick={handleShow}>
         {props.nomeBotao}
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} onEntered={() => inputNome.current.focus()}>
         <Modal.Header closeButton>
           <Modal.Title>Criar novo produto</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-6" controlId="usuarioForm.ControlInput1">
+            <Form.Group className="mb-6" id="usuarioForm.ControlInput1">
               <Form.Label>Nome</Form.Label>
               <Form.Control
                 type="text"

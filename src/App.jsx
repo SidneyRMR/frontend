@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { DataContextProvider } from './DataContext';
+import { DataContextProvider } from './Context/DataContext';
 import Login from './Telas/Login'
 import Administrativo from './Telas/Administrativo';
 

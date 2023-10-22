@@ -16,7 +16,7 @@ body {
   background-image: url(./img/plano-fundo.jpg);
   margin: 0; /* Remova margens do corpo para cobrir toda a tela */
   height: 100vh; /* Defina a altura para cobrir a viewport inteira */
-
+  min-width: 900px;
 }
 
 .sub-titulo{

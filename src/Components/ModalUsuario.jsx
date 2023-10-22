@@ -4,7 +4,7 @@ import { api } from "../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { useDataContext } from "../DataContext";
+import { useDataContext } from "../Context/DataContext";
 const ModalUsuario = (props) => {
   const { atualizaUsuarios } = useDataContext();
   const [show, setShow] = useState(false);
@@ -12,8 +12,6 @@ const ModalUsuario = (props) => {
   const [nome, setNome] = useState(props.dado && props.dado.nome ? props.dado.nome :  '');
   const [login, setLogin] = useState(props.dado && props.dado.login ? props.dado.login :  '');
   const [senha, setSenha] = useState();
-  // console.log("idFesta-ModalUsuario", props.festa);
-  // console.log("dado-ModalUsuario", props.dado);
   
   useEffect(() => {
     // Este código será executado toda vez que 'show' for alterado
@@ -44,9 +42,9 @@ const ModalUsuario = (props) => {
         nome,
         login,
         senha,
-        festumId: props.festa,
+        festaId: props.festa,
       });
-      atualizaUsuarios()
+      atualizaUsuarios(props.festa)
       toast.success(`${res.data.mensagem} `, {
         position: toast.POSITION.TOP_CENTER,
       });
@@ -65,7 +63,7 @@ const ModalUsuario = (props) => {
           nome,
           login,
         });
-        atualizaUsuarios()
+        atualizaUsuarios(props.festa)
         // console.log(res.data);
         toast.success(`${res.data.mensagem}`, {
           position: toast.POSITION.TOP_CENTER,
@@ -79,7 +77,6 @@ const ModalUsuario = (props) => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  console.log("festaModalUsuario", props.festa);
 
   const inputNome = useRef(null);
   return (
@@ -100,7 +97,7 @@ const ModalUsuario = (props) => {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-6" controlId="usuarioForm.ControlInput1">
+            <Form.Group className="mb-6" >
               <Form.Label>Nome</Form.Label>
               <Form.Control
                 type="text"
@@ -112,7 +109,7 @@ const ModalUsuario = (props) => {
             </Form.Group>
             <Form.Group
               className="mb-3"
-              controlId="usuarioForm.ControlTextarea1"
+              
             >
               <Form.Label>Login</Form.Label>
               <Form.Control
@@ -125,7 +122,7 @@ const ModalUsuario = (props) => {
             {props.seletor === "usuarios" ? null : (
               <Form.Group
                 className="mb-3"
-                controlId="usuarioForm.ControlTextarea1"
+                
               >
                 <Form.Label>Senha</Form.Label>
                 <Form.Control

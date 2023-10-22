@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { api } from "./services/api";
+import React, { createContext, useContext, useState } from 'react';
+import { api } from "../services/api";
 
 const DataContext = createContext();
 
@@ -10,6 +10,7 @@ export function useDataContext() {
 export function DataContextProvider({ children }) {
   const [dados, setDados] = useState([]);
   const [festas, setFestas] = useState([]);
+  // const [festa, setFesta] = useState();
 
   const atualizaFestas = async () => {
     try {
@@ -21,19 +22,22 @@ export function DataContextProvider({ children }) {
       console.error(error);
     }
   };
-  const atualizaUsuarios = async () => {
+  const atualizaUsuarios = async (festaId) => {
+    // console.log('festaId',festaId)
     try {
-      let res = await api.get(`/api/usuario`);
-      res = await res.data.usuario;
+      // let res = await api.get(`/api/usuario`);
+      let res = await api.get(`/api/usuario/${festaId}`);
+      res = await res.data.usuarios;
+      // console.log('usuario',res)
       setDados(res);
     } catch (error) {
       console.error(error);
     }
   };
-  const atualizaProdutos = async () => {
+  const atualizaProdutos = async (festaId) => {
     try {
-      let res = await api.get(`/api/produto`);
-      res = await res.data.produto;
+      let res = await api.get(`/api/produto/${festaId}`);
+      res = await res.data.produtos;
       setDados(res);
     } catch (error) {
       console.error(error);
@@ -49,9 +53,9 @@ export function DataContextProvider({ children }) {
     }
   };
 
-  useEffect(() => {
-    atualizaFestas();
-  }, []);
+  // useEffect(() => {
+  //   atualizaFestas();
+  // }, []);
 
   return (
     <DataContext.Provider value={{ dados, festas, atualizaFestas, atualizaVendas, atualizaProdutos, atualizaUsuarios }}>
