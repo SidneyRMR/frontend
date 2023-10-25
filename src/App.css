@@ -14,9 +14,10 @@
 body {
   /* background: linear-gradient(to right, #f0e68c, #d2b48c); */
   background-image: url(./img/plano-fundo.jpg);
-  margin: 0; /* Remova margens do corpo para cobrir toda a tela */
-  height: 100vh; /* Defina a altura para cobrir a viewport inteira */
-  min-width: 900px;
+  margin: 0;
+   /* Remova margens do corpo para cobrir toda a tela */
+  height: 100vh; 
+  /* min-width: 900px; */
 }
 
 .sub-titulo{
@@ -25,13 +26,28 @@ body {
   font-size: large;
 }
 
-/* #escolha-festa{
-  padding: 10px;
-  color: rgb(207, 238, 156);
-  font-weight: 300;
-  font-size: x-large;
+#desactive {
+  font-size: 16px;
+  padding:  6px 10px 6px 10px ;
+  color:azure;
 }
-
-.divisa {
-  color:antiquewhite
-} */
+#active {
+  font-size: 18px;
+  padding:  6px 12px 6px 12px ;
+  background-color: #212529;
+  color:azure;
+  /* transition: font-size 0.3s, padding 0.3s; */
+}
+#usuario-logado {
+  padding: 10px;
+}
+#hovered-link {
+  padding: 10px;
+  color: rgb(197, 74, 74);
+  border-radius: 15px;
+}
+#hovered-link:hover {
+  padding: 10px;
+  color: white;
+  background-color: #212529;
+}

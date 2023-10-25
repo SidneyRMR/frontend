@@ -9,8 +9,6 @@ export const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token"); // Ou de onde você obtém o token
-    // const expiresIn = localStorage.getItem("expiresIn"); 
-    // console.log("espira em ", expiresIn);
     if (token){
       config.headers.Authorization = token;
     }

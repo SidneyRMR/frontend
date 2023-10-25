@@ -1,12 +1,12 @@
-import { Table, Button } from "react-bootstrap";
+import { Table, Button, Container } from "react-bootstrap";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { api } from "../services/api";
+import { api } from "../../services/api";
 import ModalFesta from "./ModalFesta";
 import ModalUsuario from "./ModalUsuario";
 import ModalProduto from "./ModalProduto";
-import { useDataContext } from "../Context/DataContext";
-import { format } from "date-fns";
+import { useDataContext } from "../../Context/DataContext";
+// import { format } from "date-fns";
 
 const ListagemTabelas = (props) => {
   const { atualizaFestas, atualizaProdutos, atualizaUsuarios, dados } =
@@ -61,7 +61,9 @@ const ListagemTabelas = (props) => {
         });
         return res.data;
       } catch (error) {
-        toast.error(error.response.data.mensagem);
+        toast.error(error.response.data.mensagem, {
+          position: toast.POSITION.TOP_CENTER,
+        });
       }
     }
   };
@@ -92,12 +94,14 @@ const ListagemTabelas = (props) => {
         });
         return res.data;
       } catch (error) {
-        toast.error(error.response.data.mensagem);
+        toast.error(error, {
+          position: toast.POSITION.TOP_CENTER,
+        });
       }
     }
   };
   return (
-    <>
+    <Container>
       <Table className="tabela align-center">
         <thead>
           <tr>
@@ -108,7 +112,7 @@ const ListagemTabelas = (props) => {
                 coluna === "updatedAt" ||
                 coluna === "createdAt" 
                 ? null : (
-                  <th>{coluna.toUpperCase()}</th>
+                  <th key={i}>{coluna.toUpperCase()}</th>
                 )
               )}
             <th style={{ width: "35%" }}>AÇÕES</th>
@@ -197,7 +201,7 @@ const ListagemTabelas = (props) => {
             )}
         </tbody>
       </Table>
-    </>
+    </Container>
   );
 };
 

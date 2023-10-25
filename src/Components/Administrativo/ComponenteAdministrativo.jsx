@@ -6,7 +6,7 @@ import ModalFesta from "./ModalFesta";
 import ModalProduto from "./ModalProduto";
 import ListagemTabelas from "./ListagemTabelas";
 
-import { useDataContext } from "../Context/DataContext";
+import { useDataContext } from "../../Context/DataContext";
 
 function ComponenteAdministrativo(props) {
   const { atualizaFestas, atualizaProdutos, atualizaVendas, atualizaUsuarios} =

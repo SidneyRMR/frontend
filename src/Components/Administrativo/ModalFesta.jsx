@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
-import { api } from "../services/api";
+import { api } from "../../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { useDataContext } from "../Context/DataContext";
+import { useDataContext } from "../../Context/DataContext";
 const ModalFesta = (props) => {
   const { atualizaFestas } = useDataContext();
   const [ nome, setNome ] = useState(props.dado && props.dado.nome ? props.dado.nome :  '');
@@ -40,7 +40,9 @@ const ModalFesta = (props) => {
       console.log(res.data)
       return res.data ;
     } catch (error) {
-      toast.error(error.response.data.mensagem);
+      toast.error(error.response.data.mensagem, {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
   };
 
@@ -61,7 +63,9 @@ const ModalFesta = (props) => {
         });
         return res.data;
       } catch (error) {
-        toast.error(error.response.data.mensagem);
+        toast.error(error.response.data.mensagem, {
+          position: toast.POSITION.TOP_CENTER,
+        });
       }
     }
   };

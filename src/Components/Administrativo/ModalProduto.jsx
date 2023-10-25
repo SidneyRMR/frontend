@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
-import { api } from "../services/api";
+import { api } from "../../services/api";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-import { useDataContext } from "../Context/DataContext";
+import { useDataContext } from "../../Context/DataContext";
 const ModalProduto = (props) => {
   const { atualizaProdutos } = useDataContext();
   const [show, setShow] = useState(false);
@@ -67,11 +67,13 @@ const ModalProduto = (props) => {
       });
       return res.data;
     } catch (error) {
-      toast.error(`error.response.data.mensagem)`,{position: toast.POSITION.TOP_CENTER}
-      )
+      toast.error(error.response.data.mensagem, {
+        position: toast.POSITION.TOP_CENTER,
+      })
+    }
   }
+  
 
-  toast.error('Verifique os valores!')}
 
   const alteraProduto = async (
     id,
@@ -99,7 +101,9 @@ const ModalProduto = (props) => {
         });
         return res.data;
       } catch (error) {
-        toast.error(error.response.data.mensagem);
+        toast.error(error.response.data.mensagem, {
+          position: toast.POSITION.TOP_CENTER,
+        });
       }
     }
   };

@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
-import { api } from "../services/api";
+import { api } from "../../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { useDataContext } from "../Context/DataContext";
+import { useDataContext } from "../../Context/DataContext";
 const ModalUsuario = (props) => {
   const { atualizaUsuarios } = useDataContext();
   const [show, setShow] = useState(false);
@@ -50,7 +50,9 @@ const ModalUsuario = (props) => {
       });
       return res.data;
     } catch (error) {
-      toast.error(error.response.data.mensagem);
+      toast.error(error.response.data.mensagem, {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
   };
 
@@ -70,7 +72,9 @@ const ModalUsuario = (props) => {
         });
         return res.data;
       } catch (error) {
-        toast.error(error.response.data.mensagem);
+        toast.error(error.response.data.mensagem, {
+          position: toast.POSITION.TOP_CENTER,
+        });
       }
     }
   };

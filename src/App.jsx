@@ -1,8 +1,10 @@
 import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { DataContextProvider } from './Context/DataContext';
+import { VendasContextProvider } from './Context/VendasContext';
 import Login from './Telas/Login'
 import Administrativo from './Telas/Administrativo';
+import Vendas from './Telas/Vendas';
 
 function App() {
   return (
@@ -14,6 +16,12 @@ function App() {
               <DataContextProvider>
                 <Administrativo/>
             </DataContextProvider>
+        } 
+        />
+          <Route path="/vendas" element={
+              <VendasContextProvider>
+                <Vendas/>
+            </VendasContextProvider>
         } 
         />
           
