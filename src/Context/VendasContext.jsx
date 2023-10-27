@@ -15,7 +15,7 @@ export function VendasContextProvider({ children }) {
     try {
       let res = await api.get(`/api/caixa/${usuarioId}`);
       res = await res.data.caixas;
-      console.log(res);
+      // console.log(res);
       setCaixas(res);
     } catch (error) {
       console.error(error);

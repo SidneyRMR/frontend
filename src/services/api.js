@@ -1,8 +1,19 @@
 import axios from "axios";
 
+function isMobile() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+// Defina a URL da API com base no tipo de dispositivo
+const apiUrlDefault = process.env.REACT_APP_API_URL; // URL padrão da API
+
+// console.log('default',apiUrlDefault);
+// console.log('mobile',apiUrl);
+const baseURL = isMobile() ? 'http://192.168.100.7:8800' : apiUrlDefault;
+// const baseURL =  apiUrl 
+
 export const api = axios.create({
-  // baseURL: 'http://localhost:8800'
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL ,
 });
 
 // Adicione um interceptor para todas as solicitações
@@ -15,9 +26,8 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
-    window.href="/login"
+    window.location.href = "/login"; // Corrigido: era window.href, deve ser window.location.href
     return Promise.reject(error);
-
   }
 );
 

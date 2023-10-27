@@ -1,7 +1,7 @@
 // Importações do bootstrap
 import Nav from "react-bootstrap/Nav";
 import { Navbar, Container } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import ComponenteCaixa from "../Components/Vendas/ComponenteCaixa";
 import ComponenteVendas from "../Components/Vendas/ComponenteVendas";
@@ -15,21 +15,20 @@ function Vendas() {
   const { carregaCaixas } = useVendasContext();
 
   useEffect(() => {
-    console.log(dadosUsuario);
+    // console.log(dadosUsuario);
     dadosUsuario && carregaCaixas(dadosUsuario.id); // Chama carregaCaixas ao montar o componente
-  }, [dadosUsuario, carregaCaixas]);
+  }, [dadosUsuario]);
 
   return (
     <>
       <Navbar
         expand="lg"
-        className="bg-body-tertiary"
+        className="bg-body-tertiary justify-content"
         data-bs-theme="dark"
-        // collapseOnSelect
+        // fixed="top"
       >
         <ToastContainer />
-        <Container>
-          <Navbar.Toggle aria-controls="navbarScroll" />
+        <Container >
           <Navbar.Brand href="/vendas">Gestao de Caixas</Navbar.Brand>
           <Nav id="navbarScroll">
             <Nav.Item title="Usuário Logado">
@@ -60,7 +59,7 @@ function Vendas() {
           </Nav>
         </Container>
       </Navbar>
-      <div className="bg-body-tertiary" data-bs-theme="dark">
+      <div className="bg-body-tertiary d-flex" data-bs-theme="dark">
         <ComponenteCaixa dadosUsuario={dadosUsuario} />
       </div>
     </>

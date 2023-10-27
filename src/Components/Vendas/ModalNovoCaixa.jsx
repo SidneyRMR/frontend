@@ -6,18 +6,18 @@ import "react-toastify/dist/ReactToastify.css";
 import { useVendasContext } from "../../Context/VendasContext";
 
 const ModalNovoCaixa = (props) => {
-  const [ saldoDinheiro, setSaldoDinheiro ] = useState(null);
+  const [saldoDinheiro, setSaldoDinheiro] = useState(null);
   const [show, setShow] = useState(false);
   const { carregaCaixas } = useVendasContext();
 
   const dadosUsuarioJSON = sessionStorage.getItem("dadosUsuario");
-const dadosUsuario = JSON.parse(dadosUsuarioJSON);
-console.log(dadosUsuario)
+  const dadosUsuario = JSON.parse(dadosUsuarioJSON);
+  // console.log(dadosUsuario);
   const handleSaldoDinheiroChange = (event) => {
     setSaldoDinheiro(event.target.value);
   };
 
-    // Função que cria uma nova festa
+  // Função que cria uma nova festa
   const novoCaixa = async (saldoDinheiro) => {
     try {
       const res = await api.post("/api/caixa", {
@@ -27,10 +27,10 @@ console.log(dadosUsuario)
         usuarioId: dadosUsuario.id,
       });
       toast.success(`${res.data.mensagem}`, {
-        position: toast.POSITION.TOP_CENTER, 
+        position: toast.POSITION.TOP_CENTER,
       });
-      carregaCaixas(dadosUsuario.id)
-      return res.data ;
+      carregaCaixas(dadosUsuario.id);
+      return res.data;
     } catch (error) {
       toast.error(error.response.data.mensagem, {
         position: toast.POSITION.TOP_CENTER,
@@ -44,12 +44,16 @@ console.log(dadosUsuario)
   return (
     <>
       <ToastContainer />
-      
-        <Button type='button' variant="primary" onClick={handleShow}>
-          {props.nomeBotao}
-        </Button>
 
-      <Modal show={show} onHide={handleClose} onEntered={() => inputSaldoDinheiro.current.focus()}>
+      <Button type="button" variant="primary" onClick={handleShow}>
+        {props.nomeBotao}
+      </Button>
+
+      <Modal
+        show={show}
+        onHide={handleClose}
+        onEntered={() => inputSaldoDinheiro.current.focus()}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Novo Caixa</Modal.Title>
         </Modal.Header>
@@ -71,8 +75,8 @@ console.log(dadosUsuario)
           <Button
             variant="primary"
             onClick={() => {
-                novoCaixa(saldoDinheiro) &&
-                handleClose()}}
+              novoCaixa(saldoDinheiro) && handleClose();
+            }}
           >
             Abrir Caixa
           </Button>

@@ -3,6 +3,10 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { api } from "../../services/api";
 import { useVendasContext } from "../../Context/VendasContext";
+
+import { FaFolderOpen } from 'react-icons/fa';
+import { FaElementor } from 'react-icons/fa';
+import { FaCalendarTimes } from 'react-icons/fa';
 // import { useEffect } from "react";
 
 const ListagemCaixas = (props) => {
@@ -63,13 +67,10 @@ const ListagemCaixas = (props) => {
         <thead>
           <tr>
             {/* <th>ID</th> */}
-            <th>DATA ABERTURA</th>
-            <th>SALDO</th>
-            <th>SITUAÇÃO</th>
-            <th>FESTA</th>
-            <th>USUÁRIO</th>
-
-            <th style={{ width: "35%" }}>AÇÕES</th>
+            {/* <th>DATA ABERTURA</th> */}
+            <th>SALDO <br/>SITUAÇÃO</th>
+            <th>FESTA<br/>USUÁRIO</th>
+            <th >AÇÕES</th>
           </tr>
         </thead>
 
@@ -77,16 +78,14 @@ const ListagemCaixas = (props) => {
           {caixas?.map((caixa, i) => (
             <tr key={i}>
               {/* <td>{caixa.id}</td> */}
-              <td>{caixa.createdAt}</td>
-              <td>{caixa.saldo_dinheiro}</td>
-              <td>{caixa.aberto === true ? "ABERTO" : "FECHADO"}</td>
-              <td>{caixa.festaNome?.toUpperCase()}</td>
-              <td>{caixa.usuarioNome?.toUpperCase()}</td>
+              {/* <td>{caixa.createdAt}</td> */}
+              <td>R$ {caixa.saldo_dinheiro}<br/><span className={caixa.aberto ? 'green': 'red'}>{caixa.aberto === true ? "ABERTO" : "FECHADO"}</span></td>
+              <td>{caixa.festaNome?.toUpperCase()}<br/>{caixa.usuarioNome?.toUpperCase()}</td>
               <td>
-                {" "}
                 {caixa.aberto === true ? (
                   <>
                     <Button
+                    title="Abrir Caixa Existente"
                       variant="success"
                       onClick={() =>
                         abrirVenda(
@@ -97,23 +96,25 @@ const ListagemCaixas = (props) => {
                         )
                       }
                     >
-                      Abrir Caixa
+                      <FaFolderOpen/>
                     </Button>{" "}
                   </>
                 ) : null}
                 {" "}
                 <Button
+                title="Detalhes das Vendas do Caixa"
                   variant="warning"
                   // onClick={() =>
                   //   encerrar(caixa.id, caixa.nome, props.seletor, caixa.login)
                   // }
                   >
-                  Detalhes
+                  <FaElementor/>
                 </Button>
                 {" "}
                   {caixa.aberto === true ? (
                     <>
                       <Button
+                      title="Fechar Caixa"
                         variant="danger"
                         onClick={() =>
                           encerrar(
@@ -124,7 +125,7 @@ const ListagemCaixas = (props) => {
                           )
                         }
                       >
-                        Encerrar
+                        <FaCalendarTimes/>
                       </Button>
                     </>
                   ) : null}{" "}

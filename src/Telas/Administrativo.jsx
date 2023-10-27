@@ -34,6 +34,7 @@ function Administrativo() {
         expand="lg"
         className="bg-body-tertiary"
         data-bs-theme="dark"
+        // fixed="top"
         collapseOnSelect
       >
         <ToastContainer />
