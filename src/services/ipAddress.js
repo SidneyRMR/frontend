@@ -7,6 +7,7 @@ const buscaIpAdress = async () => {
     const ipAddress = res.data.ipAddress;
     const urlFront = `${ipAddress}:3000/login`;
     const urlApi = `${ipAddress}:8800`;
+    console.log(urlApi);
     return [urlFront, urlApi]
   } catch (error) {
     console.error(error);

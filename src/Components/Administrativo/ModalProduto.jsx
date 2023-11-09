@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 import { useDataContext } from "../../Context/DataContext";
+import { FaEdit } from "react-icons/fa";
 const ModalProduto = (props) => {
   const { atualizaProdutos } = useDataContext();
   const [show, setShow] = useState(false);
@@ -32,6 +33,12 @@ const ModalProduto = (props) => {
       setTipo('comida');
     }
   }, [show, props.dado]);
+
+  function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
+  }
 
   // Manipulador de evento para atualizar o estado da descrição quando o usuário alterar o valor do input
   const handleNomeChange = (event) => {
@@ -116,7 +123,7 @@ const ModalProduto = (props) => {
     <>
 
       <Button variant="primary" onClick={handleShow}>
-        {props.nomeBotao}
+        {nome ? (isMobile() ? <FaEdit/> : 'Editar') : 'Novo Produto'}
       </Button>
 
       <Modal show={show} onHide={handleClose} onEntered={() => inputNome.current.focus()}>

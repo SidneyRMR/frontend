@@ -6,6 +6,7 @@ import ModalFesta from "./ModalFesta";
 import ModalUsuario from "./ModalUsuario";
 import ModalProduto from "./ModalProduto";
 import { useDataContext } from "../../Context/DataContext";
+import { FaElementor, FaWindowClose } from "react-icons/fa";
 // import { format } from "date-fns";
 
 const ListagemTabelas = (props) => {
@@ -13,6 +14,12 @@ const ListagemTabelas = (props) => {
     useDataContext();
   if (!dados || dados.length === 0) {
     return <p>Nenhum dado disponível.</p>;
+  }
+
+  function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
   }
 
   const colunas = Object.keys(dados[0]);
@@ -110,12 +117,13 @@ const ListagemTabelas = (props) => {
               colunas.map((coluna, i) =>
                 coluna === "administrador" ||
                 coluna === "updatedAt" ||
-                coluna === "createdAt" 
+                coluna === "createdAt" ||
+                coluna === "id" 
                 ? null : (
                   <th key={i}>{coluna.toUpperCase()}</th>
                 )
               )}
-            <th style={{ width: "35%" }}>AÇÕES</th>
+            <th style={{ width: "50%" }}>AÇÕES</th>
           </tr>
         </thead>
 
@@ -129,7 +137,8 @@ const ListagemTabelas = (props) => {
                       colunas.map((coluna, i) =>
                         coluna === "administrador" ||
                         coluna === "updatedAt" ||
-                        coluna === "createdAt"
+                        coluna === "createdAt" ||
+                        coluna === "id"
                          ? null : (
                           <td key={i}>
                             {coluna === "ativa" || 
@@ -148,21 +157,21 @@ const ListagemTabelas = (props) => {
                         props.seletor === "festas" ? (
                           <ModalFesta
                             festa={props.festa}
-                            nomeBotao="Alterar"
+                            nomeBotao="Editar"
                             dado={dado}
                             seletor={props.seletor}
                           />
                         ) : props.seletor === "usuarios" ? (
                           <ModalUsuario
                             festa={props.festa}
-                            nomeBotao="Alterar"
+                            nomeBotao="Editar"
                             dado={dado}
                             seletor={props.seletor}
                           />
                         ) : props.seletor === "produtos" ? (
                           <ModalProduto
                             festa={props.festa}
-                            nomeBotao="Alterar"
+                            nomeBotao="Editar"
                             dado={dado}
                             seletor={props.seletor}
                           />
@@ -170,12 +179,14 @@ const ListagemTabelas = (props) => {
                          )} {" "}
 
                       {props.seletor === "festas" ? (
-                        <Button variant="success">Detalhes</Button>
+                        <Button variant="warning">
+                          {isMobile() ? <FaElementor/> : 'Detalhes'}
+                        </Button>
                       ) : null}{" "}
 
                       {dado.ativo === true || dado.ativa === true ? (
                         <Button
-                          variant="warning"
+                          variant="danger"
                           onClick={() =>
                             encerrar(
                               dado.id,
@@ -185,15 +196,15 @@ const ListagemTabelas = (props) => {
                             )
                           }
                         >
-                          Encerrar
+                          {isMobile() ? <FaWindowClose/> : 'Encerrar'}
                         </Button>
                       ) : null}{" "}
-                      <Button
+                      {/* <Button
                         variant="danger"
                         onClick={() => excluir(dado.id, props.seletor)}
                       >
                         Excluir
-                      </Button>
+                      </Button> */}
                     </td>
                   </tr>
                 </>

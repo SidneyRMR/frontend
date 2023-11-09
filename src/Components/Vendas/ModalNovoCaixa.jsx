@@ -63,7 +63,7 @@ const ModalNovoCaixa = (props) => {
               <Form.Label>Digite o Saldo Inicial</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Insira o nome da festa"
+                placeholder="Insira o caixa inicial"
                 onChange={handleSaldoDinheiroChange}
                 value={saldoDinheiro}
                 ref={inputSaldoDinheiro}

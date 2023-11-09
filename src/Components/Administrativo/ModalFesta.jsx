@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { useDataContext } from "../../Context/DataContext";
+import { FaEdit } from "react-icons/fa";
 const ModalFesta = (props) => {
   const { atualizaFestas } = useDataContext();
   const [ nome, setNome ] = useState(props.dado && props.dado.nome ? props.dado.nome :  '');
@@ -71,6 +72,12 @@ const ModalFesta = (props) => {
   };
   // console.log('festaModalFesta',props.festa) 
 
+  function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
+  }
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -80,7 +87,7 @@ const ModalFesta = (props) => {
       <ToastContainer />
       
         <Button type='button' variant="primary" onClick={handleShow}>
-          {props.nomeBotao}
+        {nome ? (isMobile() ? <FaEdit/> : 'Editar') : 'Nova Festa'}
         </Button>
 
       <Modal show={show} onHide={handleClose} onEntered={() => inputNome.current.focus()}>

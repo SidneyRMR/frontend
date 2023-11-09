@@ -9,6 +9,7 @@ const ModalQrCode = () => {
 
   const [apiUrl, setApiUrl] = useState('');
   const [frontUrl, setFrontUrl] = useState('');
+  
   const buscaIpAdress = async () => {
     try {
       const res = await api.get('/api/getIpAddress');
@@ -23,8 +24,8 @@ const ModalQrCode = () => {
     }
   };
 
-  console.log('urlApi', apiUrl)
-  console.log('urlFront',frontUrl)
+  // console.log('urlApi', apiUrl)
+  // console.log('urlFront',frontUrl)
 
   const handleClose = () => setShowModal(false);
 

@@ -7,11 +7,13 @@ import ModalQrCode from "./ModalQrCode";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { useVendasContext } from "../Context/VendasContext";
+
 const Login = () => {
   function IsMobile() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
-
+  const { carregaCaixas } = useVendasContext();
   const VerificaUsuario = async (login, senha) => {
     // let uss = { login: 'srafael', senha: 'srafael' };
     let uss = { login: login, senha: senha };
@@ -41,8 +43,8 @@ const Login = () => {
         if (isAdmin) {
           window.location.href = "/administrativo";
         } else {
+          carregaCaixas(dadosUsuario.id);
           window.location.href = "/vendas";
-          // console.log('não é admin - entrar na tela de vendas',isAdmin);
         }
       } else {
         throw new Error("Verifique sua conexão ou credenciais inválidas!");
@@ -53,19 +55,6 @@ const Login = () => {
       });
     }
   };
-  // const [apiUrl, setApiUrl] = useState('');
-  // const GeraQrCode = async () => {
-  //     try {
-  //       const res = await api.get('/api/getIpAddress');
-  //       const ipAddress = res.data.ipAddress;
-  //       const url = `${ipAddress}:3000/login`;
-  //     setApiUrl(url);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //     console.log(`${apiUrl.ipAddress}/login`);
-  //   };
-  
 
   const [user, setUser] = useState();
   const [password, setPassword] = useState();

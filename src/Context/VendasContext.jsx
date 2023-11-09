@@ -8,9 +8,15 @@ export function useVendasContext() {
 }
 
 export function VendasContextProvider({ children }) {
+  const [caixa, setCaixa] = useState();
   const [caixas, setCaixas] = useState([]);
-  // const [festa, setFesta] = useState();
-
+  const [produtos, setProdutos] = useState();
+  const [vendas, setVendas] = useState();
+  
+  const carregaCaixa = async (caixa) => {
+    setCaixa(caixa);
+    console.log('carregaCaixaDoContext',caixa);
+  }
   const carregaCaixas = async (usuarioId) => {
     try {
       let res = await api.get(`/api/caixa/${usuarioId}`);
@@ -21,27 +27,27 @@ export function VendasContextProvider({ children }) {
       console.error(error);
     }
   };
-  // const carregaProdutos = async (festaId) => {
-  //   try {
-  //     let res = await api.get(`/api/produto/${festaId}`);
-  //     res = await res.data.produtos;
-  //     setDados(res);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-  // const carregaVendas = async () => {
-  //   try {
-  //     let res = await api.get(`/api/venda`);
-  //     res = await res.data.venda;
-  //     setDados(res);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+  const carregaProdutos = async (festaId) => {
+    try {
+      let res = await api.get(`/api/produto/${festaId}`);
+      res = await res.data.produtos;
+      setProdutos(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const carregaVendas = async (festaId) => {
+    try {
+      let res = await api.get(`/api/venda/${festaId}`);
+      res = await res.data.venda;
+      setVendas(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
-    <VendasContext.Provider value={{ caixas, carregaCaixas}}>
+    <VendasContext.Provider value={{ caixa, carregaCaixa, caixas, carregaCaixas, produtos, carregaProdutos, vendas, carregaVendas}}>
       {children}
     </VendasContext.Provider>
   );

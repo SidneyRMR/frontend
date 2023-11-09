@@ -7,6 +7,8 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  margin: 0;
+  padding: 0;
 }
 
 /* Alteracoes a partir daqui */
@@ -18,6 +20,8 @@ body {
    /* Remova margens do corpo para cobrir toda a tela */
   height: 100vh; 
   /* min-width: 900px; */
+  
+  padding: 0;
 }
 
 .sub-titulo{
@@ -32,11 +36,10 @@ body {
   color:azure;
 }
 #active {
-  font-size: 18px;
-  padding:  6px 12px 6px 12px ;
+  /* font-size: 18px; */
+  /* padding:  6px 10px 6px 10px ; */
   background-color: #212529;
   color:azure;
-  /* transition: font-size 0.3s, padding 0.3s; */
 }
 #usuario-logado {
   padding: 10px;
@@ -51,9 +54,40 @@ body {
   color: white;
   background-color: #212529;
 }
+#hovered-yellow {
+  padding: 10px;
+  color: green;
+  border-radius: 15px;
+}
+#hovered-yellow:hover {
+  padding: 10px;
+  color: white;
+  background-color: #212529;
+}
 .red{
   color:lightcoral ;
 }
 .green{
   color:green
+}
+#titulo {
+  color: white;
+  font-size: x-large;
+}
+#HoverCard:hover {
+  background-color: gray; /* Altere a cor para a cor desejada no hover */
+  color: #fff; /* Cor do texto no hover */
+  
+  /* transition: font-size 0.3s, padding 0.3s; */
+}
+
+.floating-button {
+  position: fixed;
+  font-size: 20px;
+  bottom: 50px;
+  left: 120px;
+  z-index: 999; /* Certifique-se de que o botão esteja na parte superior de outros elementos */
+  border-radius: 50%; /* Transforme o botão em um círculo */
+  width: 10px;
+  height: 10px;
 }
