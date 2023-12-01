@@ -70,12 +70,12 @@ const ModalProduto = (props) => {
       });
       atualizaProdutos(props.festa)
       toast.success(`${res.data.mensagem}`, {
-        position: toast.POSITION.TOP_CENTER,
+        position: toast.POSITION.TOP_LEFT,
       });
       return res.data;
     } catch (error) {
       toast.error(error.response.data.mensagem, {
-        position: toast.POSITION.TOP_CENTER,
+        position: toast.POSITION.TOP_LEFT,
       })
     }
   }
@@ -104,12 +104,12 @@ const ModalProduto = (props) => {
         // console.log(res.data);
         atualizaProdutos(props.festa)
         toast.success(`${res.data.mensagem}`, {
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_LEFT,
         });
         return res.data;
       } catch (error) {
         toast.error(error.response.data.mensagem, {
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_LEFT,
         });
       }
     }

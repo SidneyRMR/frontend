@@ -9,7 +9,7 @@ const apiUrlDefault = process.env.REACT_APP_API_URL; // URL padrão da API
 
 // console.log('default',apiUrlDefault);
 // console.log('mobile',apiUrl);
-const baseURL = isMobile() ? 'http://192.168.100.7:8800' : apiUrlDefault;
+const baseURL = isMobile() ? 'http://192.168.190.39:8800' : apiUrlDefault;
 // const baseURL =  apiUrl 
 
 export const api = axios.create({

@@ -51,7 +51,7 @@ const Login = () => {
       }
     } catch (error) {
       return toast.error(error.response.data.mensagem, {
-        position: toast.POSITION.TOP_CENTER,
+        position: toast.POSITION.TOP_LEFT,
       });
     }
   };

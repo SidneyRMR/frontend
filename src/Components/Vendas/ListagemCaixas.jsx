@@ -21,12 +21,12 @@ const ListagemCaixas = (props) => {
         const res = await api.put(endpoint, body);
         carregaCaixas(props.dadosUsuario.id);
         toast.success(res.data.mensagem, {
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_LEFT,
         });
         return res.data;
       } catch (error) {
         toast.error(error.response.data.mensagem, {
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_LEFT,
         });
       }
     }

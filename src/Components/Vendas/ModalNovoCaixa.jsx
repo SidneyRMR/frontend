@@ -27,13 +27,13 @@ const ModalNovoCaixa = (props) => {
         usuarioId: dadosUsuario.id,
       });
       toast.success(`${res.data.mensagem}`, {
-        position: toast.POSITION.TOP_CENTER,
+        position: toast.POSITION.TOP_LEFT,
       });
       carregaCaixas(dadosUsuario.id);
       return res.data;
     } catch (error) {
       toast.error(error.response.data.mensagem, {
-        position: toast.POSITION.TOP_CENTER,
+        position: toast.POSITION.TOP_LEFT,
       });
     }
   };

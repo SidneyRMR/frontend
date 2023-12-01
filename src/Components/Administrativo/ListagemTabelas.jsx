@@ -7,10 +7,11 @@ import ModalUsuario from "./ModalUsuario";
 import ModalProduto from "./ModalProduto";
 import { useDataContext } from "../../Context/DataContext";
 import { FaElementor, FaWindowClose } from "react-icons/fa";
+import ModalVendaProdutos from "./ModalVendaProdutos";
 // import { format } from "date-fns";
 
 const ListagemTabelas = (props) => {
-  const { atualizaFestas, atualizaProdutos, atualizaUsuarios, dados } =
+  const { atualizaFestas, atualizaProdutos, atualizaUsuarios, atualizaVendas, dados } =
     useDataContext();
   if (!dados || dados.length === 0) {
     return <p>Nenhum dado disponível.</p>;
@@ -51,8 +52,13 @@ const ListagemTabelas = (props) => {
             id: id,
             ativo: 0,
           };
-        }
+        } else if (seletor === "vendas") {
 
+          endpoint = `/api/vendas/${id}`;
+          body = {
+            id: id
+          };
+        }
         const res = await api.put(endpoint, body);
        
 
@@ -62,51 +68,53 @@ const ListagemTabelas = (props) => {
           await atualizaUsuarios(props.festa);
         } else if (seletor === "produtos") {
           await atualizaProdutos(props.festa);
+        } else if (seletor === "vendas") {
+          await atualizaVendas(props.festa);
         }
         toast.success(res.data.mensagem, {
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_LEFT,
         });
         return res.data;
       } catch (error) {
         toast.error(error.response.data.mensagem, {
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_LEFT,
         });
       }
     }
   };
 
-  const excluir = async (id, seletor) => {
-    if (window.confirm("Tem certeza de que deseja excluir este item?")) {
-      // console.log(id, seletor);
-      try {
-        let endpoint = "";
+  // const excluir = async (id, seletor) => {
+  //   if (window.confirm("Tem certeza de que deseja excluir este item?")) {
+  //     // console.log(id, seletor);
+  //     try {
+  //       let endpoint = "";
 
-        if (seletor === "festas") {
-          endpoint = `/api/festa/${id}`;
-        } else if (seletor === "usuarios") {
-          endpoint = `/api/usuario/${id}`;
-        } else if (seletor === "produtos") {
-          endpoint = `/api/produto/${id}`;
-        }
-        const res = await api.delete(endpoint);
-        if (seletor === "festas") {
-          await atualizaFestas();
-        } else if (seletor === "usuarios") {
-          await atualizaUsuarios(props.festa);
-        } else if (seletor === "produtos") {
-          await atualizaProdutos(props.festa);
-        }
-        toast.success(`${res.data.mensagem}`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        return res.data;
-      } catch (error) {
-        toast.error(error, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-      }
-    }
-  };
+  //       if (seletor === "festas") {
+  //         endpoint = `/api/festa/${id}`;
+  //       } else if (seletor === "usuarios") {
+  //         endpoint = `/api/usuario/${id}`;
+  //       } else if (seletor === "produtos") {
+  //         endpoint = `/api/produto/${id}`;
+  //       }
+  //       const res = await api.delete(endpoint);
+  //       if (seletor === "festas") {
+  //         await atualizaFestas();
+  //       } else if (seletor === "usuarios") {
+  //         await atualizaUsuarios(props.festa);
+  //       } else if (seletor === "produtos") {
+  //         await atualizaProdutos(props.festa);
+  //       }
+  //       toast.success(`${res.data.mensagem}`, {
+  //         position: toast.POSITION.TOP_LEFT,
+  //       });
+  //       return res.data;
+  //     } catch (error) {
+  //       toast.error(error, {
+  //         position: toast.POSITION.TOP_LEFT,
+  //       });
+  //     }
+  //   }
+  // };
   return (
     <Container>
       <Table className="tabela align-center">
@@ -123,14 +131,14 @@ const ListagemTabelas = (props) => {
                   <th key={i}>{coluna.toUpperCase()}</th>
                 )
               )}
-            <th style={{ width: "50%" }}>AÇÕES</th>
+            <th >AÇÕES</th>
           </tr>
         </thead>
 
         <tbody>
           {dados &&
             dados.map((dado, i) =>
-              dado.nome === "festaMaster" || dado.nome === "Master User" ? null : (
+              dado?.nome === "festaMaster" || dado?.nome === "Master User" ? null : (
                 <>
                   <tr key={i} className={i % 2 === 0 ? "Par" : "Impar"}>
                     {colunas &&
@@ -152,7 +160,7 @@ const ListagemTabelas = (props) => {
                       )}
 
                     {/* Trecho com logica dos botões */}
-                    <td style={{ textAlign: "center", width: "35%" }}>
+                    <td style={{ textAlign: "center" }}>
                        {(
                         props.seletor === "festas" ? (
                           <ModalFesta
@@ -178,14 +186,23 @@ const ListagemTabelas = (props) => {
                         ) : null
                          )} {" "}
 
+                      {/* Mostra botão detalhes quando estiver na aba festa 
+                          Este botão deve exibir o relatorios com total de venda 
+                          e quantos podutos de cada foram vendidos*/}
                       {props.seletor === "festas" ? (
                         <Button variant="warning">
                           {isMobile() ? <FaElementor/> : 'Detalhes'}
                         </Button>
                       ) : null}{" "}
-
-                      {dado.ativo === true || dado.ativa === true ? (
-                        <Button
+                      {/* Mostra botão detalhes quando estiver na aba vendas 
+                          Este botão deve exibir os produtos vendidos desta venda*/}
+                          {console.log(dado)}
+                      {/* {props.seletor === "vendas" ? (
+                        // <ModalVendaProdutos usuarioId={dado.usuarioId}/> 
+                      ) : null} */}
+                      {
+                        dado.ativo === true || dado.ativa === true ? (
+                          <Button
                           variant="danger"
                           onClick={() =>
                             encerrar(
@@ -198,7 +215,8 @@ const ListagemTabelas = (props) => {
                         >
                           {isMobile() ? <FaWindowClose/> : 'Encerrar'}
                         </Button>
-                      ) : null}{" "}
+                      ) : null }
+                      {" "}
                       {/* <Button
                         variant="danger"
                         onClick={() => excluir(dado.id, props.seletor)}

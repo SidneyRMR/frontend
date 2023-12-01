@@ -8,34 +8,36 @@ import { useVendasContext } from "../Context/VendasContext";
 import ListagemCaixas from "../Components/Vendas/ListagemCaixas";
 import ModalNovoCaixa from "../Components/Vendas/ModalNovoCaixa";
 import ModalSangria from "../Components/Vendas/ModalSangria";
+import ModalHistoricoVendas from "../Components/Vendas/ModalHistoricoVendas";
 
 function Vendas() {
   const dadosUsuarioJSON = sessionStorage.getItem("dadosUsuario");
   const dadosUsuario = JSON.parse(dadosUsuarioJSON);
-
   const { carregaCaixas, caixas, carregaCaixa} = useVendasContext();
-
   const [selectedItem, setSelectedItem] = useState("festas");
-
-
   const caixasAbertos = caixas?.filter((caixa) => caixa.aberto);
   const caixaSaldo = caixasAbertos[0]?.saldo_dinheiro
   const caixaId = caixasAbertos[0]?.id
   const caixaAtual = caixasAbertos[0]
-  console.log('caixaAtual',caixaAtual)
+  
+  // console.log('caixaAtual',caixaAtual)
   // console.log('saldo',caixaSaldo)
   // console.log('id',caixaId)
 
-  useEffect(() => {
+useEffect(() => {
+
+  carregaCaixas(dadosUsuario.id);
+},[])
+
+  const funcCarregaCaixas = () => {
     // console.log(dadosUsuario);
     if (dadosUsuario) {
-      carregaCaixas(dadosUsuario.id);
       carregaCaixa(caixaAtual);
     } 
-  }, []);
+  }
 
   const handleItemClick = (item) => {
-    console.log("Item selecionado", selectedItem);
+    // console.log("Item selecionado", selectedItem);
     setSelectedItem(item);
   };
   return (
@@ -69,18 +71,12 @@ function Vendas() {
     <Navbar.Collapse className="justify-content-center align-items-center" id="responsive-navbar-nav">
 
       <Nav className="mr-auto">
-        <Nav.Link
-          onClick={() => {
-          
-          }}
-        >
-          Histórico Vendas
+        <Nav.Link>
+          <ModalHistoricoVendas/>
         </Nav.Link>
       </Nav>
       <Nav>
-        <Nav.Link
-    
-        >
+        <Nav.Link>
           <ModalSangria caixaId={caixaId} caixaSaldo={caixaSaldo}/>
         </Nav.Link>
       </Nav>
@@ -139,9 +135,10 @@ function Vendas() {
           <ComponenteVendas
             dadosUsuario={dadosUsuario}
             selectedItem={selectedItem}
+            caixaAtual={caixaAtual}
           />
         ) : (
-          <ListagemCaixas dadosUsuario={dadosUsuario} selectedItem={selectedItem}/>
+          <ListagemCaixas onClick={() => funcCarregaCaixas()} dadosUsuario={dadosUsuario} selectedItem={selectedItem} />
         )}
       </div>
     </>

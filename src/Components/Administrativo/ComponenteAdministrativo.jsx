@@ -9,7 +9,7 @@ import ListagemTabelas from "./ListagemTabelas";
 import { useDataContext } from "../../Context/DataContext";
 
 function ComponenteAdministrativo(props) {
-  const { atualizaFestas, atualizaProdutos, atualizaVendas, atualizaUsuarios} =
+  const { atualizaFestas, atualizaProdutos, atualizaVendas, atualizaUsuarios, totalVendas} =
     useDataContext();
 
   const [nomeBotao, setNomeBotao] = useState("Nova Festa");
@@ -28,7 +28,7 @@ function ComponenteAdministrativo(props) {
       setNomeBotao("Novo Produto");
     } else if (props.seletor === "vendas") {
       setNomeBotao(null);
-      atualizaVendas();
+      atualizaVendas(props.festa);
     }
   }, [props.seletor]);
   
@@ -51,7 +51,6 @@ function ComponenteAdministrativo(props) {
           LISTAGEM DE {props.seletor.toUpperCase()}
         </div>
       </Stack>
-
       <ListagemTabelas
         seletor={props.seletor}
         dados={props.dados}

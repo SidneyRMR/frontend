@@ -7,7 +7,8 @@ function ResumoPedido({
   selectedItems,
   handleRemoveFromCart,
   handleModalClose,
-  handleRemoveAllFromCart
+  handleRemoveAllFromCart,
+  caixaAtual
 }) {
   function isMobile() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -17,13 +18,13 @@ function ResumoPedido({
 
   const [totalPedido, setTotalPedido] = useState(0);
 
-  const calcularTotalPedido = () => {
-    const total = selectedItems.reduce((acc, item) => acc + parseFloat(item.precoTotal), 0);
-    setTotalPedido(total);
-  };
   useEffect(() => {
+    const calcularTotalPedido = () => {
+      const total = selectedItems.reduce((acc, item) => acc + parseFloat(item.precoTotal), 0);
+      setTotalPedido(total);
+    };
     calcularTotalPedido();
-  }, [calcularTotalPedido]);
+  });
   return (
     <>
       <Card>
@@ -49,7 +50,11 @@ function ResumoPedido({
                       ? `R$ ${parseFloat(item.preco).toFixed(2)}`
                       : `R$ ${parseFloat(item.preco).toFixed(2)}`}
                   </td>
-                  <td>{item.quantidade}</td>
+                  <td>
+                  {typeof item.quantidade === "string"
+                      ? `${parseFloat(item.quantidade).toFixed(2)}`
+                      : `${parseFloat(item.quantidade).toFixed(2)}`}
+                  </td>
                   <td>
                     {typeof item.precoTotal === "string"
                       ? `R$ ${parseFloat(item.precoTotal).toFixed(2)}`
@@ -79,7 +84,8 @@ function ResumoPedido({
             disabled={selectedItems?.length === 0 ? true : false}
             variant="success"
           >
-            <ModalFinalizarPedido handleRemoveAllFromCart={handleRemoveAllFromCart} totalPedido={totalPedido}/>
+            
+            <ModalFinalizarPedido selectedItems={selectedItems} handleRemoveAllFromCart={handleRemoveAllFromCart} totalPedido={totalPedido} caixaAtual={caixaAtual}/>
           </Button>
           {isMobile() ? 
           <Button

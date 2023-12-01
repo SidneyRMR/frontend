@@ -9,7 +9,7 @@ function isMobile() {
   );
 }
 
-function ComponenteVendas(props) {
+function ComponenteVendas({ dadosUsuario, caixaAtual }) {
   const { carregaProdutos, produtos } = useVendasContext();
   const produtosAtivos = produtos?.filter((produto) => produto.ativo === true);
   const [tipoSelecionado, setTipoSelecionado] = useState("comida");
@@ -18,14 +18,12 @@ function ComponenteVendas(props) {
   const [showModal, setShowModal] = useState(false);
   const [showModalPedido, setShowModalPedido] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [totalPrecoCarrinho, setTotalPrecoCarrinho] = useState(null);
-
 
   const [existingItemChanged, setExistingItemChanged] = useState(false);
 
   useEffect(() => {
     // Carrega os produtos quando o componente for montado
-    props.dadosUsuario && carregaProdutos(props.dadosUsuario.festa);
+    dadosUsuario && carregaProdutos(dadosUsuario.festa);
   }, [existingItemChanged]);
 
   const produtosExibidos = () => {
@@ -50,7 +48,7 @@ function ComponenteVendas(props) {
   };
   useEffect(() => {
     // Carrega os produtos quando o componente for montado
-    props.dadosUsuario && carregaProdutos(props.dadosUsuario.festa);
+    dadosUsuario && carregaProdutos(dadosUsuario.festa);
   }, [selectedItems]);
 
   const handleAddToCart = (produto) => {
@@ -72,8 +70,10 @@ function ComponenteVendas(props) {
         setSelectedItems([
           ...selectedItems,
           {
+            id: produto.id,
             nome: produto.nome,
             preco: produto.preco,
+            medida: produto.medida,
             quantidade: 1,
             precoTotal: produto.preco,
           },
@@ -95,8 +95,10 @@ function ComponenteVendas(props) {
       setSelectedItems([
         ...selectedItems,
         {
+          id: selectedProduct.id,
           nome: selectedProduct.nome,
           preco: selectedProduct.preco,
+          medida: selectedProduct.medida,
           quantidade: parseFloat(precoPeso),
           precoTotal: parseFloat(precoPeso) * selectedProduct.preco,
         },
@@ -108,8 +110,8 @@ function ComponenteVendas(props) {
   };
 
   const handleRemoveAllFromCart = () => {
-    setSelectedItems([])
-  }
+    setSelectedItems([]);
+  };
 
   const handleRemoveFromCart = (item) => {
     const updatedItems = selectedItems.map((selectedItem) => {
@@ -130,17 +132,28 @@ function ComponenteVendas(props) {
 
   return (
     <Container className="bg-body-tertiary">
-      {isMobile() ? 
-      <>
-        <Card>Total de itens: {selectedItems.reduce((acc, item) => acc + parseFloat(item.quantidade), 0)}</Card>
-        <Card>Valor Total R$ {selectedItems.reduce((acc, item) => acc + parseFloat(item.precoTotal), 0).toFixed(2)}</Card>
-      </>
-      : null}
+      {isMobile() ? (
+        <>
+          <Card>
+            Total de itens:{" "}
+            {selectedItems.reduce(
+              (acc, item) => acc + parseFloat(item.quantidade),
+              0
+            )}
+          </Card>
+          <Card>
+            Valor Total R${" "}
+            {selectedItems
+              .reduce((acc, item) => acc + parseFloat(item.precoTotal), 0)
+              .toFixed(2)}
+          </Card>
+        </>
+      ) : null}
       <div className="row">
         <div className="col-md-7">
           <Card>
             <Card.Header>
-              <Nav fill  variant="tabs" defaultActiveKey="#comida">
+              <Nav fill variant="tabs" defaultActiveKey="#comida">
                 <Nav.Item>
                   <Nav.Link
                     onClick={() => setTipoSelecionado("comida")}
@@ -176,9 +189,26 @@ function ComponenteVendas(props) {
                     onClick={() => handleAddToCart(produto)}
                   >
                     <Card.Header>{produto.nome.slice(0, 15)}</Card.Header>
-                    <Card.Body id="HoverCard">
+                    <Card.Body id="HoverCard" >
                       <Card.Title>R$ {produto.preco} </Card.Title>
-                      Estoque: <span>{produto.estoque}</span>
+                      Estoque:{" "}
+                      <span>
+                        {(() => {
+                          const itemSelecionado = selectedItems.find(
+                            (item) => item.nome === produto.nome
+                          );
+                          const estoqueAtualizado =
+                            itemSelecionado
+                              ? produto.estoque - itemSelecionado.quantidade
+                              : produto.estoque;
+
+                          if (estoqueAtualizado === 0) {
+                            return estoqueAtualizado;
+                          } else {
+                            return estoqueAtualizado;
+                          }
+                        })()}
+                      </span>
                     </Card.Body>
                   </Card>
                 </div>
@@ -198,11 +228,10 @@ function ComponenteVendas(props) {
           ) : (
             <div className="col-sm-5">
               <ResumoPedido
+                caixaAtual={caixaAtual}
                 selectedItems={selectedItems}
                 handleRemoveFromCart={handleRemoveFromCart}
                 handleRemoveAllFromCart={handleRemoveAllFromCart}
-                
-                
               />
             </div>
           )}
@@ -212,6 +241,7 @@ function ComponenteVendas(props) {
             onHide={() => setShowModalPedido(false)}
           >
             <ResumoPedido
+              caixaAtual={caixaAtual}
               selectedItems={selectedItems}
               handleRemoveFromCart={handleRemoveFromCart}
               handleModalClose={handleModalClose}

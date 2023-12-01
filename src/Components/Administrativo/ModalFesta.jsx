@@ -36,13 +36,13 @@ const ModalFesta = (props) => {
       atualizaFestas()
       toast.success(`${res.data.mensagem}`, {
         
-        position: toast.POSITION.TOP_CENTER, 
+        position: toast.POSITION.TOP_LEFT, 
       });
       console.log(res.data)
       return res.data ;
     } catch (error) {
       toast.error(error.response.data.mensagem, {
-        position: toast.POSITION.TOP_CENTER,
+        position: toast.POSITION.TOP_LEFT,
       });
     }
   };
@@ -60,12 +60,12 @@ const ModalFesta = (props) => {
         // console.log(res.data);
         atualizaFestas()
         toast.success(`${res.data.mensagem}`, {
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_LEFT,
         });
         return res.data;
       } catch (error) {
         toast.error(error.response.data.mensagem, {
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_LEFT,
         });
       }
     }

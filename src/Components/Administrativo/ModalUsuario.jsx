@@ -53,12 +53,12 @@ const ModalUsuario = (props) => {
       });
       atualizaUsuarios(props.festa)
       toast.success(`${res.data.mensagem} `, {
-        position: toast.POSITION.TOP_CENTER,
+        position: toast.POSITION.TOP_LEFT,
       });
       return res.data;
     } catch (error) {
       toast.error(error.response.data.mensagem, {
-        position: toast.POSITION.TOP_CENTER,
+        position: toast.POSITION.TOP_LEFT,
       });
     }
   };
@@ -75,12 +75,12 @@ const ModalUsuario = (props) => {
         atualizaUsuarios(props.festa)
         // console.log(res.data);
         toast.success(`${res.data.mensagem}`, {
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_LEFT,
         });
         return res.data;
       } catch (error) {
         toast.error(error.response.data.mensagem, {
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_LEFT,
         });
       }
     }
