@@ -9,6 +9,12 @@ import { FaCalendarTimes } from 'react-icons/fa';
 const ListagemCaixas = (props) => {
   const { caixas, carregaCaixas } = useVendasContext();
 
+  function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
+  }
+
   const encerrar = async (id) => {
     if (window.confirm("Tem certeza de que deseja encerrar este item?")) {
       try {
@@ -61,7 +67,7 @@ const ListagemCaixas = (props) => {
                   //   encerrar(caixa.id, caixa.nome, props.seletor, caixa.login)
                   // }
                   >
-                  <FaElementor/>
+                  {isMobile() ? <FaElementor/> : 'Detalhes'}
                 </Button>
                 {" "}
                   {caixa.aberto === true ? (
@@ -78,7 +84,7 @@ const ListagemCaixas = (props) => {
                           )
                         }
                       >
-                        <FaCalendarTimes/>
+                        {isMobile() ? <FaCalendarTimes/> : 'Encerrar'}
                       </Button>
                     </>
                   ) : null}{" "}
@@ -86,7 +92,7 @@ const ListagemCaixas = (props) => {
             </tr>
           ))}
         </tbody>
-      </Table>
+      </Table> 
     </>
   );
 };

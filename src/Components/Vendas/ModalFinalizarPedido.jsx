@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Form,
   Button,
@@ -11,15 +11,17 @@ import "react-toastify/dist/ReactToastify.css";
 import { useVendasContext } from "../../Context/VendasContext";
 
 const ModalFinalizarPedido = ({
-  handleRemoveAllFromCart,
+  handleRemoveAllFromCart,  
   totalPedido,
   caixaAtual,
   selectedItems,
 }) => {
-  const { carregaVendasByUsuario, produtos } = useVendasContext();
+  const { carregaVendasByUsuario, produtos, carregaCaixas } = useVendasContext();
   const dadosUsuarioJSON = sessionStorage.getItem("dadosUsuario");
   const dadosUsuario = JSON.parse(dadosUsuarioJSON);
   const [show, setShow] = useState(false);
+
+  const [troco, setTroco] = useState(null)
 
   const handleClose = () => {
     setShow(false);
@@ -27,6 +29,7 @@ const ModalFinalizarPedido = ({
     setValorCredito(0);
     setValorDebito(0);
     setValorPix(0);
+    // setTroco(null);
   };
   
   const handleShow = () => {
@@ -35,6 +38,7 @@ const ModalFinalizarPedido = ({
     setValorCredito(0);
     setValorDebito(0);
     setValorPix(0);
+    // setTroco(null);
   };
   
   const inputDinheiro = useRef(null);
@@ -271,7 +275,6 @@ const ModalFinalizarPedido = ({
             }
           </style>
         </html>
-        ${"\x1D\x56\x00"}
     `);
   };
 
@@ -371,28 +374,59 @@ const ModalFinalizarPedido = ({
       });
     }
   };
+  /////////////////////
   const atualizarSaldoDinheiro = async (pgtoDinheiro, saldoCaixa) => {
-    const totalDinheiro = +pgtoDinheiro + +saldoCaixa
+    const totalDinheiro = +pgtoDinheiro + +saldoCaixa - +troco
     console.log("testeAtualiza caixa", totalDinheiro)
-    try {
-      let res = await api.put(`/api/caixa/${caixaAtual.id}`, {
-        dinheiro: totalDinheiro
-      });
-      res = await res.data.caixas;
-      return res;
-      
-   
-    } catch (error) {
-      // Em caso de erro, exibe o erro no console e uma mensagem de erro usando Toast
-      console.log("erro em atualizar saldo", error);
-      toast.error(error.message, {
-        position: toast.POSITION.TOP_LEFT,
-      });
-      throw error; // Lança novamente o erro para que possa ser tratado por quem chamou esta função, se necessário.
+      try {
+        const res = await api.put(`/api/caixa/${caixaAtual.id}`, {
+          id: caixaAtual.id,
+          saldo_dinheiro: totalDinheiro
+        });
+        carregaCaixas(dadosUsuario.id)
+        return res.data;
+      } catch (error) {
+        toast.error(error.response.data.mensagem, {
+          position: toast.POSITION.TOP_LEFT,
+        });
+      }
     }
-  };
-  
+  //////////////////////
+  const pagamentoValido =
+    +valorDinheiro + +valorCredito + +valorDebito + +valorPix >= totalPedido &&
+    (+valorDinheiro >= 0 ||
+      +valorCredito >= 0 ||
+      +valorDebito >= 0 ||
+      +valorPix >= 0)
+      const CalculoTroco = ({ totalPedido, valorDinheiro, valorCredito, valorDebito, valorPix }) => {
+        const [troco, setTrocoint] = useState(null);
+      
+        const calcularTroco = () => {
+          const somaTotal =
+            Number(valorDinheiro) +
+            Number(valorCredito) +
+            Number(valorDebito) +
+            Number(valorPix);
+      
+          const trocoTemp = (somaTotal - Number(totalPedido)).toFixed(2);
+      
+          if (somaTotal >= Number(totalPedido)) {
+            setTrocoint(trocoTemp);
+            setTroco(trocoTemp)
+          } else {
+            setTrocoint("Sem troco");
+          }
+        };
+      
+        // Calcular troco ao montar o componente
+        useEffect(() => {
+          calcularTroco();
+        }, [totalPedido, valorDinheiro, valorCredito, valorDebito, valorPix]);
+      
+        return <div>Troco: {troco !== null ? <strong>{troco}</strong> : null}</div>;
+      };
 
+      console.log('troco',troco)
   return (
     <>
       <ToastContainer />
@@ -508,79 +542,49 @@ const ModalFinalizarPedido = ({
         <hr />
 
         <Modal.Footer style={{ borderTop: "none" }}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <div style={{ marginBottom: "10px" }}>
-              Valor a Pagar: <strong>R$ {totalPedido.toFixed(2)}</strong>
-            </div>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ marginBottom: "10px" }}>
+          Valor a Pagar: <strong>R$ {totalPedido.toFixed(2)}</strong>
+        </div>
 
-            {/* <div style={{ marginBottom: "5px" }}>
-      {/* Valor total pago: R$ {totalPago.toFixed(2)} 
-    </div> 
-    */}
+        <CalculoTroco
+          totalPedido={totalPedido}
+          valorDinheiro={valorDinheiro}
+          valorCredito={valorCredito}
+          valorDebito={valorDebito}
+          valorPix={valorPix}
+        />
+      </div>
 
-            <div>
-              Troco: R${" "}
-              {(() => {
-                const somaTotal = (
-                  Number(valorDinheiro) +
-                  Number(valorCredito) +
-                  Number(valorDebito) +
-                  Number(valorPix)
-                ).toFixed(2);
+      <div style={{ marginLeft: "auto" }}>
+        <Button
+          disabled={!pagamentoValido}
+          variant="primary"
+          onClick={() => {
+            if (
+              salvarVenda(
+                valorDinheiro,
+                valorCredito,
+                valorDebito,
+                valorPix
+              )
+            ) {
+              handleClose();
+            }
+          }}
+        >
+          Efetuar o Pagamento
+        </Button>
 
-                const troco = (somaTotal - Number(totalPedido)).toFixed(2);
-
-                if (somaTotal >= Number(totalPedido)) {
-                  return <strong>{troco}</strong>;
-                } else {
-                  return "Sem troco";
-                }
-              })()}
-            </div>
-          </div>
-
-          <div style={{ marginLeft: "auto" }}>
-            <Button
-              disabled={
-                +valorDinheiro + +valorCredito + +valorDebito + +valorPix <
-                  totalPedido &&
-                (+valorDinheiro >= 0 ||
-                  +valorCredito >= 0 ||
-                  +valorDebito >= 0 ||
-                  +valorPix >= 0)
-              }
-              variant="primary"
-              onClick={() => {
-                if (
-                  salvarVenda(
-                    valorDinheiro,
-                    valorCredito,
-                    valorDebito,
-                    valorPix
-                  )
-                ) {
-                  handleClose();
-                }
-              }}
-            >
-              Efetuar o Pagamento
-            </Button>
-
-            <Button
-              variant="secondary"
-              onClick={handleClose}
-              style={{ marginLeft: "10px" }}
-            >
-              Sair
-            </Button>
-          </div>
-        </Modal.Footer>
+        <Button
+          variant="secondary"
+          onClick={handleClose}
+          style={{ marginLeft: "10px" }}
+        >
+          Sair
+        </Button>
+      </div>
+    </Modal.Footer>
       </Modal>
     </>
   );

@@ -7,9 +7,8 @@ function isMobile() {
 // Defina a URL da API com base no tipo de dispositivo
 const apiUrlDefault = process.env.REACT_APP_API_URL; // URL padrão da API
 
-// console.log('default',apiUrlDefault);
-// console.log('mobile',apiUrl);
-const baseURL = isMobile() ? 'http://192.168.190.39:8800' : apiUrlDefault;
+// a url para mobile tem que digitar manualmente, falta implementar 
+const baseURL = isMobile() ? 'http://192.168.111.39:8800' : apiUrlDefault;
 // const baseURL =  apiUrl 
 
 export const api = axios.create({
